@@ -1,0 +1,18 @@
+---
+openconfig-vlan:vlans:
+  vlan:
+  - vlan-id: '111'
+    config:
+      vlan-id: 111
+      name: SALES
+      status: ACTIVE
+  - vlan-id: '222'
+    config:
+      vlan-id: 222
+      name: HR
+      status: ACTIVE
+  - vlan-id: '333'
+    config:
+      vlan-id: 333
+      name: MARKETING
+      status: ACTIVE

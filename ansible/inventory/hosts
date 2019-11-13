@@ -1,0 +1,16 @@
+[junos:vars]
+ansible_network_os=junos
+ansible_user=admin
+ansible_password=Juniper
+
+[ios:vars]
+ansible_network_os=ios
+ansible_user=cisco
+ansible_ssh_pass=cisco
+ansible_connection=network_cli
+
+[junos]
+qfx1 ansible_host=172.29.133.2
+
+[ios]
+ios1 ansible_host=172.29.133.3
