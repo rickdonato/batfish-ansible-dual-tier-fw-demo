@@ -1,4 +1,4 @@
-ansible==2.8.5
+ansible==2.9
 ansible-lint==4.1.0
 appdirs==1.4.3
 asn1crypto==1.1.0
