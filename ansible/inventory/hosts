@@ -1,3 +1,8 @@
+[linux:vars]
+ansible_connection=ssh
+ansible_user=cisco
+ansible_ssh_pass=cisco
+
 [asa:vars]
 ansible_network_os=asa
 ansible_user=cisco

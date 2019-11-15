@@ -1,27 +1,55 @@
 ---
-- name: Create Batfish Snapshot
-  hosts: asa
+- name: Create Batfish Snapshot Directory
+  hosts: localhost
   gather_facts: no
   
   vars:
-    config_dir: "./data/configs"
+    snapshot_dir: "./data/snapshots"
+    snapshot_id: "snapshot-{{ lookup('pipe', 'date +%Y%m%d')}}"    
  
+  tasks:
+    - name: Create Snapshot Directory /
+      file:
+        path: "{{ snapshot_dir }}/{{ snapshot_id }}" 
+        state: directory
+    
+    - name: Create Snapshot Directory /configs
+      file:
+        path: "{{ snapshot_dir }}/{{ snapshot_id }}/configs"
+        state: directory
+
+    - name: Create Snapshot Directory /hosts
+      file:
+        path: "{{ snapshot_dir }}/{{ snapshot_id }}/hosts"
+        state: directory
+
+    - name: Create Snapshot Directory /iptables
+      file:
+        path: "{{ snapshot_dir }}/{{ snapshot_id }}/iptables"
+        state: directory
+
+- name: Create Batfish Snapshot
+  hosts: all
+  gather_facts: yes
+
+  vars:
+    snapshot_dir: "./data/snapshots"
+    snapshot_id: "snapshot-{{ lookup('pipe', 'date +%Y%m%d')}}"
+
   tasks:
     - name: Gather Device Configs
       asa_command:
-        commands: 
-          - show running-config 
+        commands:
+          - show running-config
+      when: inventory_hostname in groups['asa']
       register: config
 
-    - name: save configs to folder 
-      copy: 
+    - name: Save Device Configs to Snapshot
+      copy:
         content: "{{ config.stdout[0] }}"
-        dest: "{{ config_dir }}/{{ inventory_hostname }}-running-config.txt"
+        dest: "{{ snapshot_dir }}/{{ snapshot_id }}/configs/{{ inventory_hostname }}.cfg"
 
-    - name: Create New Snapshot Folder
-      #epoch
-    
-    - name: Gather Host Interfaces
-      #
-
-
+    - name: Display all variables/facts known for a host
+      debug:
+        var: hostvars[inventory_hostname]
+      when: inventory_hostname in groups['linux']
