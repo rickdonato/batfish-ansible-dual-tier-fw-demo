@@ -13,6 +13,7 @@
 ASA Version 9.8(2) 
 !
 hostname FW1
+domain-name packetflow.local
 enable password $sha512$5000$Thex4jGJoAMcHjErgPUpZA==$t6lUJThpcxK4arRm7k+Zhg== pbkdf2
 xlate per-session deny tcp any4 any4
 xlate per-session deny tcp any4 any6
@@ -56,10 +57,9 @@ interface Management0/0
  ip address 172.29.132.100 255.255.255.0 
 !
 ftp mode passive
+dns server-group DefaultDNS
+ domain-name packetflow.local
 same-security-traffic permit inter-interface
-access-list ACL-OUTSIDE extended deny ip any4 any4 
-access-list ACL-INSIDE extended deny ip any4 any4 
-access-list ACL-WEBFARM extended deny ip any4 any4 
 access-list acl-inside extended deny ip any4 any4 
 access-list acl-webfarm extended permit tcp host 10.0.1.1 host 10.0.2.1 eq 3306 
 access-list acl-webfarm extended deny ip any4 any4 
@@ -82,6 +82,7 @@ arp rate-limit 8192
 access-group acl-outside in interface outside
 access-group acl-webfarm in interface webfarm
 access-group acl-inside in interface inside
+route outside 0.0.0.0 0.0.0.0 192.168.0.1 1
 route inside 10.0.2.0 255.255.255.0 10.0.0.14 1
 route mgmt 172.16.3.0 255.255.255.0 172.29.132.254 1
 timeout xlate 3:00:00
@@ -233,7 +234,9 @@ call-home
             <entry key="config" type="String">!
 ASA Version 9.8(2) 
 !
+terminal width 200
 hostname FW2
+domain-name packetflow.local
 enable password $sha512$5000$LfCfTytJcsUP6Ugskc+5QQ==$NJHSPF6lJmraTwLM+N8O9g== pbkdf2
 xlate per-session deny tcp any4 any4
 xlate per-session deny tcp any4 any6
@@ -270,6 +273,8 @@ interface Management0/0
  ip address 172.29.132.200 255.255.255.0 
 !
 ftp mode passive
+dns server-group DefaultDNS
+ domain-name packetflow.local
 same-security-traffic permit inter-interface
 access-list acl-outside extended permit tcp host 10.0.1.1 host 10.0.2.1 eq 3306 
 access-list acl-outside extended deny ip any4 any4 
@@ -491,6 +496,7 @@ write_files:
     route add -net 172.16.2.0/24 gw 172.16.1.254 dev eth1
     route add -net 172.29.132.0/24 gw 172.29.132.254 dev eth1
     route add -net 10.0.0.0/16 gw 10.0.1.254 dev eth1
+    route add -host 1.1.1.1 gw 10.0.1.254 dev eth1
     exit 0
 </entry>
         </extensions>
@@ -555,12 +561,13 @@ write_files:
     route add -net 172.16.2.0/24 gw 172.16.1.254 dev eth1
     route add -net 172.29.132.0/24 gw 172.29.132.254 dev eth1
     route add -net 10.0.0.0/16 gw 10.0.2.254 dev eth1
+    route add -host 1.1.1.1 gw 10.0.1.254 dev eth1
     exit 0
 </entry>
         </extensions>
         <interface id="0" name="eth1" ipv4="10.0.0.9" netPrefixLenV4="30"/>
     </node>
-    <node name="client" type="SIMPLE" subtype="server" location="478,11">
+    <node name="client" type="SIMPLE" subtype="server" location="494,12">
         <extensions>
             <entry key="static_ip" type="String">172.29.132.99</entry>
             <entry key="config" type="String">#cloud-config
@@ -615,6 +622,7 @@ write_files:
   content: |-
     #!/bin/sh
     ifconfig eth1 up 192.168.0.1 netmask 255.255.255.0
+    ifconfig eth2 up 1.1.1.1 netmask 255.255.255.0
     route add -net 172.16.2.0/24 gw 172.16.1.254 dev eth1
     route add -net 172.29.132.0/24 gw 172.29.132.254 dev eth1
     route add -net 10.0.0.0/16 gw 192.168.0.254 dev eth1
@@ -623,10 +631,11 @@ write_files:
 </entry>
         </extensions>
         <interface id="0" name="eth1" ipv4="10.0.0.14" netPrefixLenV4="30"/>
+        <interface id="1" name="eth2"/>
     </node>
     <annotations/>
     <connection dst="/virl:topology/virl:node[3]/virl:interface[1]" src="/virl:topology/virl:node[1]/virl:interface[2]"/>
     <connection dst="/virl:topology/virl:node[2]/virl:interface[2]" src="/virl:topology/virl:node[4]/virl:interface[1]"/>
     <connection dst="/virl:topology/virl:node[2]/virl:interface[1]" src="/virl:topology/virl:node[1]/virl:interface[3]"/>
     <connection dst="/virl:topology/virl:node[1]/virl:interface[1]" src="/virl:topology/virl:node[5]/virl:interface[1]"/>
-</topology> 
+</topology>
