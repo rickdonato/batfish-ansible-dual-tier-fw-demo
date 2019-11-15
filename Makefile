@@ -12,11 +12,16 @@ help:
 	sort | \
 	awk -F ':.*?## ' 'NF==2 {printf "\033[36m  %-25s\033[0m %s\n", $$1, $$2}'
 
-.PHONY: start-test-network
-start-test-network: ## Start test network via VIRL
+.PHONY: start-virl-network
+start-virl-network: ## Start test network via VIRL
 	. ./venv/bin/activate
 	virl up -e dual-tier-asa --provision -f ./topology.virl
-	virl ls | grep test | grep ACTIVE
+	virl ls | grep dual-tier-asa | grep ACTIVE
+
+.PHONY: distroy-virl-network
+distroy-virl-network: ## Distroy test network in VIRL
+	. ./venv/bin/activate
+	virl down dual-tier-asa
 
 .PHONY: remove-yml-eol-spaces
 remove-yml-eol-spaces: ## Remove end of line spaces from yaml files

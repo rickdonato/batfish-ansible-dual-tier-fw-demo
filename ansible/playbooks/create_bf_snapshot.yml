@@ -1,0 +1,27 @@
+---
+- name: Create Batfish Snapshot
+  hosts: asa
+  gather_facts: no
+  
+  vars:
+    config_dir: "./data/configs"
+ 
+  tasks:
+    - name: Gather Device Configs
+      asa_command:
+        commands: 
+          - show running-config 
+      register: config
+
+    - name: save configs to folder 
+      copy: 
+        content: "{{ config.stdout[0] }}"
+        dest: "{{ config_dir }}/{{ inventory_hostname }}-running-config.txt"
+
+    - name: Create New Snapshot Folder
+      #epoch
+    
+    - name: Gather Host Interfaces
+      #
+
+
