@@ -48,8 +48,15 @@
       copy:
         content: "{{ config.stdout[0] }}"
         dest: "{{ snapshot_dir }}/{{ snapshot_id }}/configs/{{ inventory_hostname }}.cfg"
+      when: inventory_hostname in groups['asa']
 
     - name: Display all variables/facts known for a host
       debug:
         var: hostvars[inventory_hostname]
+      when: inventory_hostname in groups['linux']
+  
+    - name: find interface facts
+      debug:
+        msg: "{{ hostvars[inventory_hostname]['ansible_%s' | format(item)] }}"
+      with_items: "{{ ansible_interfaces }}"
       when: inventory_hostname in groups['linux']
