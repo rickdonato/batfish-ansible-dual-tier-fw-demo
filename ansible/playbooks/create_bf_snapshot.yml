@@ -4,7 +4,7 @@
   gather_facts: no
   
   vars:
-    snapshot_dir: "./data/snapshots"
+    snapshot_dir: "../data/snapshots"
     snapshot_id: "snapshot-{{ lookup('pipe', 'date +%Y%m%d')}}"    
  
   tasks:
@@ -34,6 +34,7 @@
 
   vars:
     snapshot_dir: "./data/snapshots"
+    template_dir: "./data/templates"
     snapshot_id: "snapshot-{{ lookup('pipe', 'date +%Y%m%d')}}"
 
   tasks:
@@ -54,9 +55,15 @@
       debug:
         var: hostvars[inventory_hostname]
       when: inventory_hostname in groups['linux']
-  
+ 
     - name: find interface facts
       debug:
-        msg: "{{ hostvars[inventory_hostname]['ansible_%s' | format(item)] }}"
-      with_items: "{{ ansible_interfaces }}"
+        msg: "{{ hostvars[inventory_hostname]['ansible_%s' | format(item)]['ipv4'] }}"
+      with_items: "{{ ansible_interfaces }}" 
+      when: inventory_hostname in groups['linux']
+
+    - name: Create host file 
+      template:
+        src: "../{{ template_dir }}/hosts.j2"
+        dest: "../{{ snapshot_dir }}/{{ snapshot_id }}/hosts/{{ inventory_hostname }}.json"
       when: inventory_hostname in groups['linux']

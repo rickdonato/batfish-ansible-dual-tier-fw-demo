@@ -1,0 +1,11 @@
+{
+	"hostname": "{{ inventory_hostname }}",
+	"iptablesFile": "iptables/{{ inventory_hostname }}.iptables",
+	"hostInterfaces": {
+		"{{ int_name  }}": {
+			"name": "{{ int_name }}",
+			"prefix": "{{ address }}/{{ netmask }}",
+			"gateway": "{{ int_gateway }}"
+		}
+	}
+}
