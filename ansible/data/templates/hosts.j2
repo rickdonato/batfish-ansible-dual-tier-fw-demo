@@ -2,10 +2,10 @@
 	"hostname": "{{ inventory_hostname }}",
 	"iptablesFile": "iptables/{{ inventory_hostname }}.iptables",
 	"hostInterfaces": {
-		"{{ int_name  }}": {
-			"name": "{{ int_name }}",
-			"prefix": "{{ address }}/{{ netmask }}",
-			"gateway": "{{ int_gateway }}"
+		"{{ ansible_facts["default_ipv4"]["interface"]  }}": {
+			"name": "{{ ansible_facts["default_ipv4"]["interface"] }}",
+			"prefix": "{{ ansible_facts["default_ipv4"]["address"] }}/{{ ansible_facts["default_ipv4"]["netmask"] | ipaddr('prefix')}}",
+			"gateway": "{{ ansible_facts["default_ipv4"]["gateway"] }}"
 		}
 	}
 }

@@ -496,8 +496,8 @@ write_files:
     #!/bin/sh
     ifconfig eth1 up 10.0.1.1 netmask 255.255.255.0
     route add -net 172.16.2.0/24 gw 172.16.1.254 dev eth1
-    route add -net 172.29.132.0/24 gw 172.29.132.254 dev eth1
     route add -net 10.0.0.0/16 gw 10.0.1.254 dev eth1
+    route add default gw 10.0.1.254 eth1
     route add -host 1.1.1.1 gw 10.0.1.254 dev eth1
     exit 0
 </entry>
@@ -561,9 +561,9 @@ write_files:
     #!/bin/sh
     ifconfig eth1 up 10.0.2.1 netmask 255.255.255.0
     route add -net 172.16.2.0/24 gw 172.16.1.254 dev eth1
-    route add -net 172.29.132.0/24 gw 172.29.132.254 dev eth1
     route add -net 10.0.0.0/16 gw 10.0.2.254 dev eth1
     route add -host 1.1.1.1 gw 10.0.1.254 dev eth1
+    route add default gw 10.0.2.254 eth1
     exit 0
 </entry>
         </extensions>

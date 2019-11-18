@@ -65,5 +65,7 @@
     - name: Create host file 
       template:
         src: "../{{ template_dir }}/hosts.j2"
-        dest: "../{{ snapshot_dir }}/{{ snapshot_id }}/hosts/{{ inventory_hostname }}.json"
+        dest: "/tmp/{{ inventory_hostname }}.json"
       when: inventory_hostname in groups['linux']
+      tags:
+        - create_hosts
