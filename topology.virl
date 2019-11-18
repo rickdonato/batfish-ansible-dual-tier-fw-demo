@@ -438,11 +438,10 @@ call-home
         <interface id="0" name="GigabitEthernet0/0" ipv4="10.0.0.14" netPrefixLenV4="30"/>
         <interface id="1" name="GigabitEthernet0/1" ipv4="10.0.0.10" netPrefixLenV4="30"/>
     </node>
-    <node name="Websrv" type="SIMPLE" subtype="server" location="590,100">
+    <node name="Webserver" type="SIMPLE" subtype="server" location="590,100">
         <extensions>
             <entry key="AutoNetkit.ibgp_role" type="String">RR</entry>
             <entry key="Auto-generate config" type="Boolean">false</entry>
-            <entry key="static_ip" type="String">172.29.132.101</entry>
             <entry key="config" type="String">#cloud-config
 bootcmd:
 - ln -s -t /etc/rc.d /etc/rc.local
@@ -495,10 +494,9 @@ write_files:
   content: |-
     #!/bin/sh
     ifconfig eth1 up 10.0.1.1 netmask 255.255.255.0
-    route add -net 172.16.2.0/24 gw 172.16.1.254 dev eth1
-    route add -net 10.0.0.0/16 gw 10.0.1.254 dev eth1
+    ifconfig eth0 up 172.29.132.101 netmask 255.255.255.0
     route add default gw 10.0.1.254 eth1
-    route add -host 1.1.1.1 gw 10.0.1.254 dev eth1
+    route add -net 172.16.3.0/24 gw 172.29.132.254 dev eth0
     exit 0
 </entry>
         </extensions>
@@ -507,7 +505,6 @@ write_files:
     <node name="DB" type="SIMPLE" subtype="server" location="585,259">
         <extensions>
             <entry key="Auto-generate config" type="Boolean">false</entry>
-            <entry key="static_ip" type="String">172.29.132.201</entry>
             <entry key="config" type="String">#cloud-config
 bootcmd:
 - ln -s -t /etc/rc.d /etc/rc.local
@@ -560,10 +557,9 @@ write_files:
   content: |-
     #!/bin/sh
     ifconfig eth1 up 10.0.2.1 netmask 255.255.255.0
-    route add -net 172.16.2.0/24 gw 172.16.1.254 dev eth1
-    route add -net 10.0.0.0/16 gw 10.0.2.254 dev eth1
-    route add -host 1.1.1.1 gw 10.0.1.254 dev eth1
+    ifconfig eth0 up 172.29.132.201 netmask 255.255.255.0
     route add default gw 10.0.2.254 eth1
+    route add -net 172.16.3.0/24 gw 172.29.132.254 dev eth0
     exit 0
 </entry>
         </extensions>
@@ -571,7 +567,6 @@ write_files:
     </node>
     <node name="client" type="SIMPLE" subtype="server" location="494,12">
         <extensions>
-            <entry key="static_ip" type="String">172.29.132.99</entry>
             <entry key="config" type="String">#cloud-config
 bootcmd:
 - ln -s -t /etc/rc.d /etc/rc.local
@@ -624,11 +619,10 @@ write_files:
   content: |-
     #!/bin/sh
     ifconfig eth1 up 192.168.0.1 netmask 255.255.255.0
+    ifconfig eth0 up 172.29.132.99 netmask 255.255.255.0
     ifconfig eth2 up 1.1.1.1 netmask 255.255.255.0
-    route add -net 172.16.2.0/24 gw 172.16.1.254 dev eth1
-    route add -net 172.29.132.0/24 gw 172.29.132.254 dev eth1
-    route add -net 10.0.0.0/16 gw 192.168.0.254 dev eth1
-    route add -net 192.168.0.0/16 gw 192.168.0.254 dev eth1
+    route add default gw 192.168.0.254 eth1
+    route add -net 172.16.3.0/24 gw 172.29.132.254 dev eth0
     exit 0
 </entry>
         </extensions>
