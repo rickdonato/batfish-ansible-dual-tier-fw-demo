@@ -2,6 +2,8 @@
 ansible_connection=ssh
 ansible_user=cisco
 ansible_ssh_pass=cisco
+ansible_become_user=root
+ansible_become_password=cisco
 
 [asa:vars]
 ansible_network_os=asa
@@ -20,3 +22,8 @@ db ansible_host=172.29.132.201
 fw1-asa ansible_host=172.29.132.100
 fw2-asa ansible_host=172.29.132.200
 
+[junos]
+
+[netdev:children]
+asa
+junos

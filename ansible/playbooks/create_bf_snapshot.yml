@@ -2,17 +2,17 @@
 - name: Create Batfish Snapshot Directory
   hosts: localhost
   gather_facts: no
-  
+
   vars:
     snapshot_dir: "../data/snapshots"
-    snapshot_id: "snapshot-{{ lookup('pipe', 'date +%Y%m%d')}}"    
- 
+    snapshot_id: "snapshot"
+
   tasks:
     - name: Create Snapshot Directory /
       file:
-        path: "{{ snapshot_dir }}/{{ snapshot_id }}" 
+        path: "{{ snapshot_dir }}/{{ snapshot_id }}"
         state: directory
-    
+
     - name: Create Snapshot Directory /configs
       file:
         path: "{{ snapshot_dir }}/{{ snapshot_id }}/configs"
@@ -28,44 +28,66 @@
         path: "{{ snapshot_dir }}/{{ snapshot_id }}/iptables"
         state: directory
 
-- name: Create Batfish Snapshot
-  hosts: all
+
+- name: Create Batfish Snapshot Files for Hosts
+  hosts: linux
   gather_facts: yes
 
   vars:
     snapshot_dir: "./data/snapshots"
+    snapshot_id: "snapshot"
     template_dir: "./data/templates"
-    snapshot_id: "snapshot-{{ lookup('pipe', 'date +%Y%m%d')}}"
 
   tasks:
-    - name: Gather Device Configs
+    - name: Generate (via J2) and Save Host IP JSON
+      template:
+        src: "../{{ template_dir }}/hosts.j2"
+        dest: "../{{ snapshot_dir }}/{{ snapshot_id }}/hosts/{{ inventory_hostname }}.json"
+      delegate_to: localhost
+
+    - name: Collect IPTable Config
+      command: iptables-save
+      become: yes
+      become_method: sudo
+      register: iptables_config
+
+    - name: Save IPTable Config to Snapshot
+      copy:
+        content: "{{ iptables_config.stdout }}"
+        dest: "../{{ snapshot_dir }}/{{ snapshot_id }}/iptables/{{ inventory_hostname }}.iptables"
+      delegate_to: localhost
+
+- name: Create Batfish Snapshot Files for Net Devices
+  hosts: netdev
+  gather_facts: no
+
+  vars:
+    snapshot_dir: "./data/snapshots"
+    snapshot_id: "snapshot"
+
+  tasks:
+    - name: Collect ASA Network Device Configs
       asa_command:
         commands:
           - show running-config
       when: inventory_hostname in groups['asa']
-      register: config
+      register: asa_config
 
-    - name: Save Device Configs to Snapshot
+    - name: Collect JunOS Network Device Configs
+      junos_command:
+        commands:
+          - show configuration
+      when: inventory_hostname in groups['junos']
+      register: junos_config
+
+    - name: Save ASA Network Device Configs to Snapshot
       copy:
-        content: "{{ config.stdout[0] }}"
+        content: "{{ asa_config.stdout[0] }}"
         dest: "{{ snapshot_dir }}/{{ snapshot_id }}/configs/{{ inventory_hostname }}.cfg"
       when: inventory_hostname in groups['asa']
 
-    - name: Display all variables/facts known for a host
-      debug:
-        var: hostvars[inventory_hostname]
-      when: inventory_hostname in groups['linux']
- 
-    - name: find interface facts
-      debug:
-        msg: "{{ hostvars[inventory_hostname]['ansible_%s' | format(item)]['ipv4'] }}"
-      with_items: "{{ ansible_interfaces }}" 
-      when: inventory_hostname in groups['linux']
-
-    - name: Create host file 
-      template:
-        src: "../{{ template_dir }}/hosts.j2"
-        dest: "/tmp/{{ inventory_hostname }}.json"
-      when: inventory_hostname in groups['linux']
-      tags:
-        - create_hosts
+    - name: Save JunOS Network Device Configs to Snapshot
+      copy:
+        content: "{{ ios_config.stdout[0] }}"
+        dest: "{{ snapshot_dir }}/{{ snapshot_id }}/configs/{{ inventory_hostname }}.cfg"
+      when: inventory_hostname in groups['junos']

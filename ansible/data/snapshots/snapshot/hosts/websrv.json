@@ -1,0 +1,11 @@
+{
+	"hostname": "websrv",
+	"iptablesFile": "iptables/websrv.iptables",
+	"hostInterfaces": {
+		"eth1": {
+			"name": "eth1",
+			"prefix": "10.0.1.1/32",
+			"gateway": "10.0.1.254"
+		}
+	}
+}
