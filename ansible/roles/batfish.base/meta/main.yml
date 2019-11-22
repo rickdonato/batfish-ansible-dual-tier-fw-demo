@@ -1,0 +1,16 @@
+galaxy_info:
+  author: Batfish
+  description: Ansible modules for Batfish (www.batfish.org)
+  role_name: base
+
+  license: Apache
+
+  min_ansible_version: 2.7
+
+
+  galaxy_tags: 
+    - batfish
+    - networking
+    - validation
+
+dependencies: []
