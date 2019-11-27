@@ -1,6 +1,6 @@
 ---
 - name: Welcome to the first Batfish Tutorial!
-  hosts: all
+  hosts: localhost
   gather_facts: no
   roles:
     - batfish.base
@@ -12,10 +12,8 @@
 
     - name: Setup connection to Batfish service
       bf_session:
-        host: 172.29.236.139:8888
+        host: 172.29.236.139
         name: batfish_endpoint
-        parameters:
-          ssl: true
 
     - name: Initialize the example network
       bf_init_snapshot:
@@ -35,5 +33,4 @@
       - name: Display Batfish Facts for as1border1
         debug: msg="{{bf_facts.result}}"
 
-    delegate_to: localhost
     run_once: true
