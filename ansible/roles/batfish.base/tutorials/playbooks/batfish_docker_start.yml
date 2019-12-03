@@ -7,7 +7,7 @@
     service: false
 
 - name: Check if batfish/allinone container is running
-  set_fact: 
+  set_fact:
     service: true
   when: status.stdout.find('batfish/allinone') != -1
 

@@ -2,6 +2,12 @@
 - name: Initialize Network and Snapshot
   hosts: localhost
   gather_facts: no
+
+  vars:
+    snapshot_name: "dual_tier_fw_snapshot"
+    network_name: "dual_tier_fw_network"
+    bf_service: 172.29.236.139
+
   roles:
     - batfish.base
 
@@ -9,27 +15,23 @@
 
   - name: Setup BF Session
     bf_session:
-      host: 172.29.236.139
+      host: "{{ bf_service }}"
       name: batfish_endpoint
 
   - name: Initialize BF Snapshot
     bf_init_snapshot:
-      network: dual_tier_fw_network
-      snapshot: dual_tier_fw_snapshot
+      network: "{{ network_name }}"
+      snapshot: "{{ snapshot_name }}"
       snapshot_data: ../data/snapshots/snapshot
       overwrite: true
 
   - name: Generate Snapshot Diag Info & Save Locally
     bf_upload_diagnostics:
-      network: dual_tier_fw_network
-      snapshot: dual_tier_fw_snapshot
+      network: "{{ network_name }}"
+      snapshot: "{{ snapshot_name }}"
       dry_run: true
     register: diag_action
 
-  - name: Print Diag Info 
+  - name: Print Diag Info
     debug:
       var: diag_action.summary
-
-  - name: Retrieve BF Facts
-    bf_extract_facts:
-      output_directory: ../data/bf_facts

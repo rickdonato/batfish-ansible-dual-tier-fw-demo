@@ -1,0 +1,30 @@
+---
+- name: Initialize Network and Snapshot
+  hosts: localhost
+  gather_facts: no
+
+  vars:
+    snapshot_name: "dual_tier_fw_snapshot"
+    network_name: "dual_tier_fw_network"
+    bf_service: 172.29.236.139
+
+  roles:
+    - batfish.base
+
+  tasks:
+
+  - name: Setup BF Session
+    bf_session:
+      host: "{{ bf_service }}"
+      name: batfish_endpoint
+
+  - name: Initialize BF Snapshot
+    bf_init_snapshot:
+      network: "{{ network_name }}"
+      snapshot: "{{ snapshot_name }}"
+      snapshot_data: ../data/snapshots/snapshot
+      overwrite: true
+
+  - name: Retrieve BF Facts
+    bf_extract_facts:
+      output_directory: ../data/bf_facts

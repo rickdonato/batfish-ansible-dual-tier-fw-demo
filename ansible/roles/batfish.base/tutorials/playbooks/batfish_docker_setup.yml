@@ -32,6 +32,6 @@
 
       when: docker_installed.failed|bool == false and docker_installed.stdout is search("Docker version")
 
-    - name: Warn user about issue with Docker installation 
+    - name: Warn user about issue with Docker installation
       debug: msg="Docker is not running (or installed). Please fix and try again"
       when: docker_installed.failed|bool != false
