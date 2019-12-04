@@ -33,5 +33,6 @@
     register: diag_action
 
   - name: Print Diag Info
-    debug:
-      var: diag_action.summary
+    set_fact:
+      issues_path: '{{ diag_action.summary | regex_replace("^.*:\s", "") }}/__initIssues'
+      issues: "{{ lookup('answerElements', issues_path) | from_json  }}"
