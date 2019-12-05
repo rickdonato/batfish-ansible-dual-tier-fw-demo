@@ -31,11 +31,10 @@
       network: "{{ network_name }}"
       snapshot: "{{ snapshot_name }}"
       dry_run: true
-    register: diag_action
+    register: diag_data
 
-  - name: Print Diag Info
+  - name: Display Problematic Lines
     vars:
-      issues_path : '{{ diag_action.summary | regex_replace("^.*:\s", "") }}/__initIssues'
+      diag_path : '{{ diag_data.summary | regex_replace("^.*:\s", "") }}/__initIssues'
     debug:
-      msg="{{ (lookup('file', issues_path) | from_json).get('answerElements')[0].get('rows') }}"
-
+      msg="{{ (lookup('file', diag_path) | from_json).get('answerElements')[0].get('rows') }}"
