@@ -4,6 +4,7 @@
   gather_facts: no
 
   vars:
+    snapshot_path: "../data/snapshots/snapshot"
     snapshot_name: "dual_tier_fw_snapshot"
     network_name: "dual_tier_fw_network"
     bf_service: 172.29.236.139
@@ -22,7 +23,7 @@
     bf_init_snapshot:
       network: "{{ network_name }}"
       snapshot: "{{ snapshot_name }}"
-      snapshot_data: ../data/snapshots/snapshot
+      snapshot_data: "{{ snapshot_path }}"
       overwrite: true
 
   - name: Retrieve BF Facts

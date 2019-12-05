@@ -19,17 +19,6 @@
       snapshot_data: ../data/snapshots/snapshot
       overwrite: true
 
-  - name: Generate Snapshot Diag Info & Save Locally
-    bf_upload_diagnostics:
-      network: dual_tier_fw_network
-      snapshot: dual_tier_fw_snapshot
-      dry_run: true
-    register: diag_action
-
-  - name: Print Diag Info 
-    debug:
-      var: diag_action.summary
-
   - name: Retrieve BF Facts
     bf_extract_facts:
       output_directory: ../data/bf_facts

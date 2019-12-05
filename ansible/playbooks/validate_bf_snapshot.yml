@@ -4,6 +4,7 @@
   gather_facts: no
 
   vars:
+    snapshot_path: "../data/snapshots/snapshot"
     snapshot_name: "dual_tier_fw_snapshot"
     network_name: "dual_tier_fw_network"
     bf_service: 172.29.236.139
@@ -22,7 +23,7 @@
     bf_init_snapshot:
       network: "{{ network_name }}"
       snapshot: "{{ snapshot_name }}"
-      snapshot_data: ../data/snapshots/snapshot
+      snapshot_data: "{{ snapshot_path }}"
       overwrite: true
 
   - name: Generate Snapshot Diag Info & Save Locally
@@ -33,6 +34,8 @@
     register: diag_action
 
   - name: Print Diag Info
-    set_fact:
-      issues_path: '{{ diag_action.summary | regex_replace("^.*:\s", "") }}/__initIssues'
-      issues: "{{ lookup('answerElements', issues_path) | from_json  }}"
+    vars:
+      issues_path : '{{ diag_action.summary | regex_replace("^.*:\s", "") }}/__initIssues'
+    debug:
+      msg="{{ (lookup('file', issues_path) | from_json).get('answerElements')[0].get('rows') }}"
+
