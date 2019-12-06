@@ -28,4 +28,13 @@
 
   - name: Retrieve BF Facts
     bf_extract_facts:
-      output_directory: ../data/bf_facts
+      output_directory: ../data/bf_facts/extract
+
+  - name: Validate facts gathered by BF
+    bf_validate_facts:
+      expected_facts: ../data/bf_facts/validate
+    register: bf_validate
+    ignore_errors: true
+
+  - name: Display BF validation result details
+    debug: msg="{{bf_validate}}"
