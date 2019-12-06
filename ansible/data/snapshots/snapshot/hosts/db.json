@@ -4,7 +4,7 @@
 	"hostInterfaces": {
 		"eth1": {
 			"name": "eth1",
-			"prefix": "10.0.2.1/24",
+			"prefix": "10.0.2.1/255.255.255.0",
 			"gateway": "10.0.2.254"
 		}
 	}
