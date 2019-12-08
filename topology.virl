@@ -12,9 +12,9 @@
             <entry key="config" type="String">!
 ASA Version 9.8(2) 
 !
+terminal width 200
 hostname FW1
 domain-name packetflow.local
-crypto key generate rsa general-keys modulus 2048 noconfirm
 enable password $sha512$5000$Thex4jGJoAMcHjErgPUpZA==$t6lUJThpcxK4arRm7k+Zhg== pbkdf2
 xlate per-session deny tcp any4 any4
 xlate per-session deny tcp any4 any6
@@ -61,10 +61,14 @@ ftp mode passive
 dns server-group DefaultDNS
  domain-name packetflow.local
 same-security-traffic permit inter-interface
+access-list acl-inside extended permit udp host 10.0.2.1 host 1.1.1.1 eq ntp 
+access-list acl-inside extended permit udp host 10.0.2.1 host 8.8.8.8 eq domain 
 access-list acl-inside extended deny ip any4 any4 
+access-list acl-webfarm extended permit udp host 10.0.1.1 host 8.8.8.8 eq ntp 
+access-list acl-webfarm extended permit udp host 10.0.1.1 host 8.8.8.8 eq domain 
 access-list acl-webfarm extended permit tcp host 10.0.1.1 host 10.0.2.1 eq 3306 
 access-list acl-webfarm extended deny ip any4 any4 
-access-list acl-outside extended permit tcp host 192.168.0.1 host 10.0.1.1 eq www 
+access-list acl-outside extended permit tcp any4 host 10.0.1.1 eq www 
 access-list acl-outside extended deny ip any4 any4 
 pager lines 23
 logging enable
@@ -80,7 +84,6 @@ no asdm history enable
 arp timeout 14400
 no arp permit-nonconnected
 arp rate-limit 8192
-access-group acl-outside in interface outside
 access-group acl-webfarm in interface webfarm
 access-group acl-inside in interface inside
 route outside 0.0.0.0 0.0.0.0 192.168.0.1 1
@@ -238,7 +241,6 @@ ASA Version 9.8(2)
 terminal width 200
 hostname FW2
 domain-name packetflow.local
-crypto key generate rsa general-keys modulus 2048 noconfirm
 enable password $sha512$5000$LfCfTytJcsUP6Ugskc+5QQ==$NJHSPF6lJmraTwLM+N8O9g== pbkdf2
 xlate per-session deny tcp any4 any4
 xlate per-session deny tcp any4 any6
@@ -280,6 +282,8 @@ dns server-group DefaultDNS
 same-security-traffic permit inter-interface
 access-list acl-outside extended permit tcp host 10.0.1.1 host 10.0.2.1 eq 3306 
 access-list acl-outside extended deny ip any4 any4 
+access-list acl-db extended permit udp host 10.0.2.1 host 8.8.8.8 eq ntp 
+access-list acl-db extended permit udp host 10.0.2.1 host 8.8.8.8 eq domain 
 access-list acl-db extended deny ip any4 any4 
 pager lines 23
 logging enable
