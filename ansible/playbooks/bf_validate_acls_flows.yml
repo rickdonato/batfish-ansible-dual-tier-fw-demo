@@ -75,17 +75,24 @@
   - name: Display Batfish Validation Flow Results 
     debug: msg="{{ bf_assert }}"
 
-  - name: Validate ACL(s) on Node  
+  - name: Validate ACLs  
     bf_assert:  
       assertions:
         - type: assert_filter_has_no_unreachable_lines
           name: Confirm that the FW1 XYZ ACL has no unreachable lines
           parameters:
-            filters: 'FW1["acl-xyz"]'
+            filters: 'FW1["acl-outside", "acl-webfarm", "acl-inside"], FW2["acl-outside", "acl-db"]'
 
+        - type: assert_filter_denies
+          name: Confirm that the filter drops all traffic (excluding MySQL)  traffic
+          parameters:
+            filters: 'FW1["acl-webfarm"]'
+            headers:
+              ipProtocols: ['TCP']
+              dstPorts: '!3306'
+              
     register: bf_assert
     ignore_errors: true
 
   - name: Display Batfish Validation ACL Result Details
     debug: msg="{{ bf_assert }}"
-
