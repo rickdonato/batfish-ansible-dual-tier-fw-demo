@@ -75,7 +75,7 @@
   - name: Display Batfish Validation Flow Results 
     debug: msg="{{ bf_assert }}"
 
-  - name: Validate ACLs  
+  - name: Validate ACLs 
     bf_assert:  
       assertions:
         - type: assert_filter_has_no_unreachable_lines
@@ -86,11 +86,12 @@
         - type: assert_filter_denies
           name: Confirm that the filter drops all traffic (excluding MySQL)  traffic
           parameters:
-            filters: 'FW1["acl-webfarm"]'
+            filters: 'fw1[{{ item.filter }}]'
             headers:
-              ipProtocols: ['TCP']
-              dstPorts: '!3306'
-              
+              ipProtocols: ['{{ item.ipproto }}']
+              dstPorts: '!{{ item.dstport }}'
+          with_items: '{{ flow_ports }}'  
+        
     register: bf_assert
     ignore_errors: true
 

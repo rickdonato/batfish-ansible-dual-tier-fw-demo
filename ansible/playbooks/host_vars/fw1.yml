@@ -1,0 +1,20 @@
+---
+flow_ports:
+- filter: acl-outside
+  dstport: '80'
+  ipproto: TCP
+- filter: acl-webfarm
+  dstport: '3306'
+  ipproto: TCP
+- filter: acl-webfarm
+  dstport: '123'
+  ipproto: UDP
+- filter: acl-webfarm
+  dstport: '53'
+  ipproto: UDP
+- filter: acl-inside
+  dstport: '123'
+  ipproto: UDP
+- filter: acl-inside
+  dstport: '53'
+  ipproto: UDP

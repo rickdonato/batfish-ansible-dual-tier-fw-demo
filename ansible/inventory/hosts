@@ -19,8 +19,8 @@ websrv ansible_host=172.29.132.101
 db ansible_host=172.29.132.201
 
 [asa]
-fw1-asa ansible_host=172.29.132.100
-fw2-asa ansible_host=172.29.132.200
+fw1 ansible_host=172.29.132.100
+fw2 ansible_host=172.29.132.200
 
 [junos]
 
