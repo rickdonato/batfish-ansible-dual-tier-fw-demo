@@ -76,22 +76,13 @@
     debug: msg="{{ bf_assert }}"
 
   - name: Validate ACLs 
-    bf_assert:  
+    bf_assert:
       assertions:
         - type: assert_filter_has_no_unreachable_lines
-          name: Confirm that the FW1 XYZ ACL has no unreachable lines
+          name: Confirm that there are no unreachable lines
           parameters:
             filters: 'FW1["acl-outside", "acl-webfarm", "acl-inside"], FW2["acl-outside", "acl-db"]'
 
-        - type: assert_filter_denies
-          name: Confirm that the filter drops all traffic (excluding MySQL)  traffic
-          parameters:
-            filters: 'fw1[{{ item.filter }}]'
-            headers:
-              ipProtocols: ['{{ item.ipproto }}']
-              dstPorts: '!{{ item.dstport }}'
-          with_items: '{{ flow_ports }}'  
-        
     register: bf_assert
     ignore_errors: true
 
