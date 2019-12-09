@@ -12,9 +12,8 @@
             <entry key="config" type="String">!
 ASA Version 9.8(2) 
 !
-terminal width 200
+terminal width 300
 hostname FW1
-crypto key generate rsa general-keys modulus 2048 noconfirm
 domain-name packetflow.local
 enable password $sha512$5000$Thex4jGJoAMcHjErgPUpZA==$t6lUJThpcxK4arRm7k+Zhg== pbkdf2
 xlate per-session deny tcp any4 any4
@@ -62,7 +61,7 @@ ftp mode passive
 dns server-group DefaultDNS
  domain-name packetflow.local
 same-security-traffic permit inter-interface
-access-list acl-inside extended permit udp host 10.0.2.1 host 1.1.1.1 eq ntp 
+access-list acl-inside extended permit udp host 10.0.2.1 host 8.8.8.8 eq ntp 
 access-list acl-inside extended permit udp host 10.0.2.1 host 8.8.8.8 eq domain 
 access-list acl-inside extended deny ip any4 any4 
 access-list acl-webfarm extended permit udp host 10.0.1.1 host 8.8.8.8 eq ntp 
@@ -85,6 +84,7 @@ no asdm history enable
 arp timeout 14400
 no arp permit-nonconnected
 arp rate-limit 8192
+access-group acl-outside in interface outside
 access-group acl-webfarm in interface webfarm
 access-group acl-inside in interface inside
 route outside 0.0.0.0 0.0.0.0 192.168.0.1 1
@@ -167,7 +167,7 @@ ssh 0.0.0.0 0.0.0.0 outside
 ssh 0.0.0.0 0.0.0.0 mgmt
 ssh timeout 5
 ssh version 2
-ssh key-exchange group dh-group1-sha1
+ssh key-exchange group dh-group14-sha1
 console timeout 0
 threat-detection basic-threat
 threat-detection statistics access-list
@@ -242,7 +242,6 @@ ASA Version 9.8(2)
 terminal width 200
 hostname FW2
 domain-name packetflow.local
-crypto key generate rsa general-keys modulus 2048 noconfirm
 enable password $sha512$5000$LfCfTytJcsUP6Ugskc+5QQ==$NJHSPF6lJmraTwLM+N8O9g== pbkdf2
 xlate per-session deny tcp any4 any4
 xlate per-session deny tcp any4 any6
