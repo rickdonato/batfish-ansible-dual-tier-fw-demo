@@ -1,5 +1,5 @@
 ---
-- name: Initialize Network and Snapshot
+- name: Collect/Validate Facts
   hosts: localhost
   gather_facts: no
 

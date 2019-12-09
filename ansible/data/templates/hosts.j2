@@ -4,8 +4,9 @@
 	"hostInterfaces": {
 		"{{ ansible_facts["default_ipv4"]["interface"]  }}": {
 			"name": "{{ ansible_facts["default_ipv4"]["interface"] }}",
-			"prefix": "{{ ansible_facts["default_ipv4"]["address"] }}/{{ ansible_facts["default_ipv4"]["netmask"] }}",
+			"prefix": "{{ ansible_facts["default_ipv4"]["address"] }}/{{ (ansible_facts["default_ipv4"]["address"] + '/' + ansible_facts["default_ipv4"]["netmask"]) | ipaddr('prefix') }}",
 			"gateway": "{{ ansible_facts["default_ipv4"]["gateway"] }}"
 		}
 	}
 }
+

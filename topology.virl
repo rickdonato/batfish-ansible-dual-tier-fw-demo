@@ -14,6 +14,7 @@ ASA Version 9.8(2)
 !
 terminal width 200
 hostname FW1
+crypto key generate rsa general-keys modulus 2048 noconfirm
 domain-name packetflow.local
 enable password $sha512$5000$Thex4jGJoAMcHjErgPUpZA==$t6lUJThpcxK4arRm7k+Zhg== pbkdf2
 xlate per-session deny tcp any4 any4
@@ -241,6 +242,7 @@ ASA Version 9.8(2)
 terminal width 200
 hostname FW2
 domain-name packetflow.local
+crypto key generate rsa general-keys modulus 2048 noconfirm
 enable password $sha512$5000$LfCfTytJcsUP6Ugskc+5QQ==$NJHSPF6lJmraTwLM+N8O9g== pbkdf2
 xlate per-session deny tcp any4 any4
 xlate per-session deny tcp any4 any6

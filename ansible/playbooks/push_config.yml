@@ -1,0 +1,23 @@
+---
+- name: Apply Configuration to NetDevices
+  hosts: netdev
+  gather_facts: no
+
+  vars:
+    snapshot_path: "../data/snapshots"
+    snapshot_dir: "snapshot"
+
+  tasks:
+    - name: Remove Cryptochecksum Line
+      lineinfile:
+        path: '{{ snapshot_path }}/{{ snapshot_dir }}/configs/{{ inventory_hostname }}.cfg'
+        state: absent
+        regexp: 'Cryptocheck.*'
+      when: inventory_hostname in groups['asa']
+      delegate_to: localhost
+
+    - name: Apply Configuration to ASA's
+      asa_config:
+        src: '{{ snapshot_path }}/{{ snapshot_dir }}/configs/{{ inventory_hostname }}.cfg'
+      when: inventory_hostname in groups['asa']
+      
