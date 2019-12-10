@@ -16,20 +16,8 @@
       when: inventory_hostname in groups['asa']
       delegate_to: localhost
 
-    - name: copy file to remote host
-      copy:
-        src: '{{ snapshot_path }}/{{ snapshot_dir }}/configs/{{ inventory_hostname }}.cfg'
-        dest: config123.txt
-      when: inventory_hostname in groups['asa']
-
-    - name: Clear ASA ACL's
-      asa_config:
-        lines:
-          - "clear configure access-list"
-      when: inventory_hostname in groups['asa']
-     
     - name: Apply Configuration to ASA's
       asa_config:
         src: '{{ snapshot_path }}/{{ snapshot_dir }}/configs/{{ inventory_hostname }}.cfg'
-        save: yes
-      when: inventory_hostname in groups['asa'] 
+      when: inventory_hostname in groups['asa']
+      

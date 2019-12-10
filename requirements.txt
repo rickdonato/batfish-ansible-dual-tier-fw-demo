@@ -1,6 +1,7 @@
 ansible==2.9.0
 ansible-lint==4.1.0
 appdirs==1.4.3
+asciinema==2.0.2
 asn1crypto==1.1.0
 astroid==1.6.6
 attrs==19.2.0
@@ -53,5 +54,6 @@ tabulate==0.8.6
 toml==0.10.0
 urllib3==1.25.7
 virlutils==0.8.8
+virtualenv==16.7.7
 Werkzeug==0.16.0
 wrapt==1.11.2

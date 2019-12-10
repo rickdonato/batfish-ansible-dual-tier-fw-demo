@@ -55,7 +55,7 @@
             startLocation: '@enter(FW1[webfarm])'
             headers:
               srcIps: '10.0.1.1'
-              dstIps: '8.8.8.8'
+              dstIps: '8.8.8.8,8.8.4.4'
               dstPorts: '53,123'
               ipProtocols: 'udp'
 
@@ -65,7 +65,7 @@
             startLocation: '@enter(FW2[db])'
             headers:
               srcIps: '10.0.2.1'
-              dstIps: '8.8.8.8'
+              dstIps: '8.8.8.8,8.8.4.4'
               dstPorts: '53,123'
               ipProtocols: 'udp'
          
