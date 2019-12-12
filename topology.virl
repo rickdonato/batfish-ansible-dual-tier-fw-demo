@@ -163,6 +163,7 @@ crypto ca certificate chain _SmartCallHome_ServerCA
 telnet 0.0.0.0 0.0.0.0 outside
 telnet 0.0.0.0 0.0.0.0 mgmt
 telnet timeout 15
+ssh scopy enable
 ssh stricthostkeycheck
 ssh 0.0.0.0 0.0.0.0 outside
 ssh 0.0.0.0 0.0.0.0 mgmt
@@ -377,6 +378,7 @@ crypto ca certificate chain _SmartCallHome_ServerCA
 telnet 0.0.0.0 0.0.0.0 outside
 telnet 0.0.0.0 0.0.0.0 mgmt
 telnet timeout 15
+ssh scopy enable
 ssh stricthostkeycheck
 ssh 0.0.0.0 0.0.0.0 outside
 ssh 0.0.0.0 0.0.0.0 mgmt
