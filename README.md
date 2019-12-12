@@ -1,5 +1,5 @@
 ## Introduction
-This repo contains the code, templates and playbooks that accompanies the:
+This repo contains the code, templates and playbooks that accompanies the:<br>
 Hands-on Guide to Multi-Tiered Firewall Changes with Ansible and Batfish
 
 ## Installation
