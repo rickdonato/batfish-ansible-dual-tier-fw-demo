@@ -4,7 +4,7 @@
   gather_facts: no
 
   vars:
-    snapshot_path: "./data/snapshots"
+    snapshot_path: "../data/snapshots"
     snapshot_dir: "snapshot"
 
   tasks:
@@ -16,18 +16,13 @@
       when: inventory_hostname in groups['asa']
       delegate_to: localhost
 
-    - name: Upload Configuration to Device
-      expect:
-        command: scp -o "StrictHostKeyChecking no" '{{ snapshot_path }}/{{ snapshot_dir }}/configs/{{ inventory_hostname }}.cfg' "{{ ansible_user }}"@"{{ hostvars[inventory_hostname]['ansible_host'] }}":"disk0:configuration.txt"
-        responses:
-          'password:': "{{ ansible_password }}"
-        timeout: 180
-      when: inventory_hostname in groups['asa']
-     
-    - name: Copy Configuration to Running Configuration
-      asa_command:
-        before: "clear configure access-list"
+    - name: Clear ACL's
+      asa_config:
         commands:
-          - "copy /noconfirm disk0:/configuration.txt running-config"
-      ignore_errors: true
+          - "clear configure access-list"
+      when: inventory_hostname in groups['asa']
+
+    - name: Apply Configuration to ASA's
+      asa_config:
+        src: '{{ snapshot_path }}/{{ snapshot_dir }}/configs/{{ inventory_hostname }}.cfg'
       when: inventory_hostname in groups['asa']
