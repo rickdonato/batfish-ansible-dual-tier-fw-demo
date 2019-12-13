@@ -1,6 +1,8 @@
 ## Introduction
-This repo contains the code, templates and playbooks that accompanies the:<br>
-Hands-on Guide to Multi-Tiered Firewall Changes with Ansible and Batfish
+This repo contains the code, templates and playbooks that accompanies the **Hands-on Guide to Multi-Tiered Firewall Changes with Ansible and Batfish**
+https://packetflow.co.uk/a-hands-on-guide-to-multi-tiered-firewall-changes-with-ansible-and-batfish-part-1/
+https://packetflow.co.uk/a-hands-on-guide-to-multi-tiered-firewall-changes-with-ansible-and-batfish-part-2/
+https://packetflow.co.uk/a-hands-on-guide-to-multi-tiered-firewall-changes-with-ansible-and-batfish-part-3/
 
 ## Installation
 ### Repo
