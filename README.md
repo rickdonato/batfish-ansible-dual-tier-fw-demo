@@ -20,7 +20,7 @@ To spin up the VIRL topology run the command:
 ```
 make start-virl-topology
 ```
-Any issues stop/remove topology from VIRL UWM UI, and remove id file via `rm .virl/*/id`.
+Any issues stop/remove topology from VIRL UWM UI, and remove the id file via `rm .virl/*/id`.
 
 ## Repo Layout
 ```
