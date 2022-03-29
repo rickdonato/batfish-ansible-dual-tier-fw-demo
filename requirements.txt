@@ -34,7 +34,7 @@ netconan==0.11.0
 numpy==1.17.4
 ordered-set==3.1.1
 pandas==0.25.3
-paramiko==2.6.0
+paramiko==2.10.1
 passlib==1.7.1
 pybatfish==2019.11.20.299
 pycparser==2.19
