@@ -31,7 +31,7 @@ MarkupSafe==1.1.1
 mccabe==0.6.1
 netaddr==0.7.19
 netconan==0.11.0
-numpy==1.17.4
+numpy==1.22.0
 ordered-set==3.1.1
 pandas==0.25.3
 paramiko==2.6.0
